@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+<meta charset="UTF-8">
+<link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+<link rel="mask-icon" type="" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+<title>OOOの領収書</title>
+<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+<style>
+body {
+  max-width:800px;
+  margin:0 auto;
+  padding:0 15px;
+	font-family:monospace;
+}
+p {
+  opacity: 1;
+}
+span {
+	color:#999
+}
+img {
+	width: 100%;
+	margin: 0 auto;
+  border: 1px solid #999;
+}
+hr {
+	border-top: 1px dashed #666;
+}
+.results, .info, .divider {
+  margin: 10px 50px;
+  text-align: left;
+}
+
+</style>
+
+</head>
+
+<body translate="no" >
+  <div class="results clearfix">
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+      <script id="rendered-js" >
+// ID of the Google Spreadsheet
+var sheetID = "1XLFHgxnbKCfzPA46Ikxkbpo0mF0t0gC4XUSYsYOpcWA";
+var url = "https://spreadsheets.google.com/feeds/list/" + sheetID +"/1/public/values?alt=json";
+(
+function getDate() {
+    var date = new Date;
+      $('.info').append('<h3 style="display: inline">Google Sheet data from: <a target="_parent" href="https://docs.google.com/spreadsheets/d/1xzC_WS4Ol1-1o9Ig7XYhSEzfVnt8OxPxKZMFlJ6pZLI/edit">FAQ</a></h3>' + '<h4>Fetched on ' + date) + '<h4>';
+  })();
+  var categories = [];
+  $.getJSON(url, function(data) {
+    var entry = data.feed.entry;
+
+    $(entry).each(function() {
+      var created = false;      // create array of categories without duplicates
+      for (i = 0; i < categories.length; i++) {
+        if (categories[i] === this.gsx$invoice.$t) //ROWの数を
+          created = true;
+      }
+      if (!created) {
+        categories.push(this.title.$t);
+        // $('.results').append('<h4>' + this.title.$t + '</h4><p>' + this.title.$t + '</p>');
+				$('.results').append('<p><b>[' + this.gsx$num.$t+ ']　</b>' + this.gsx$issuedate.$t + '　' + this.gsx$price.$t + '円　' + this.gsx$type.$t + ' <span>' + this.gsx$detail.$t + '</span></p>' );
+				$('.results').append('<img src="' + this.gsx$invoiceurl.$t + '"><hr>');
+      }
+    });
+  });
+    </script>
+
+</body>
+
+</html>
