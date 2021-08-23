@@ -1,3 +1,5 @@
+# Google Api changed (working on patch)
+---
 # Japanese-receipt-collector
 Collect recepits while with your mobile, and print it out via PDF 
 
